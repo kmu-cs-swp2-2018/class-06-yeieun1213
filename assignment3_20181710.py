@@ -38,6 +38,8 @@ def doScoreDB(scdb):
         parse = inputstr.split(" ")
         if parse[0] == 'add':
             # ㅇㅖㅇㅗㅣ ㅊㅓㄹㅣ
+            if len(parse) >= 5:
+                print('IndexError : input \"add name age score\"')
             try :
                 record = {'Name':parse[1], 'Age':int(parse[2]), 'Score':int(parse[3])}
             except ValueError:
@@ -49,37 +51,48 @@ def doScoreDB(scdb):
 
         # del 'break'
         elif parse[0] == 'del':
+            if len(parse) >= 3:
+                print('IndexError : input \"del name\"')
             try:
-                for p in scdb:
-                    if p['Name'] == parse[1]:
-                        scdb.remove(p)
+                while(True):
+                    for p in scdb[:]:
+                        if p['Name'] == parse[1]:
+                            scdb.remove(p)
+                    if parse[1] not in p['Name']:
+                        print('Does not exist')
+                    break
             except IndexError:
                 print('IndexError : input \"del name\"')
-            else:
-                if parse[1] not in p['Name']:
-                    print('Does not exist')
+
         elif parse[0] == 'show':
+            if len(parse) >= 2:
+                print('IndexError : input only \"show\"')
             try:
                 sortKey ='Name' if len(parse) == 1 else parse[1]
                 showScoreDB(scdb, sortKey)
             except KeyError:
                 print('KeyError :', sortKey)
 
-        elif parse[0] == 'quit':
-            break
-
         elif parse[0] == 'find':
+            if len(parse) >= 2:
+                print('IndexError : input \"find name\"')
             try:
-                for p in scdb:
-                    if p['Name'] == parse[1]:
-                        for attr in p:
-                                #must be str, not int
-                                print(attr + "=" + str(p[attr]), end=' ')
-                        print()
+                while(True):
+                    for p in scdb:
+                        if p['Name'] == parse[1]:
+                            for attr in p:
+                                    #must be str, not int
+                                    print("%s = %s" %(attr, str(p[attr])), end=' ')
+                            print()
+                    if parse[1] not in p['Name']:
+                        print("Does not exist")
+                    break
             except IndexError:
                 print('IndexError : input \"find name\"')
 
         elif parse[0] == 'inc':
+            if len(parse) >= 4:
+                print('IndexError : input \"inc name amount\"')
             try:
                 name = str(parse[1])
                 amount = int(parse[2])
@@ -94,8 +107,14 @@ def doScoreDB(scdb):
                 if name not in p['Name']:
                     print('name does not exist')
 
+        elif parse[0] == 'quit':
+            if len(parse) >= 2:
+                print('IndexError : input only \"quit\"')
+            break
+
         else:
             print("Invalid command: " + parse[0])
+
 
 
 def showScoreDB(scdb, keyname):
