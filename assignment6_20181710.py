@@ -17,59 +17,43 @@ class ScoreDB(QWidget):
         self.showScoreDB()
 
     def initUI(self):
-
-        nameLabel = QLabel("Name:")
-        nameLine = QLineEdit(self)
-        ageLabel = QLabel("age:")
-        ageLine = QLineEdit(self)
-        scoreLabel = QLabel("score:")
-        scoreLine = QLineEdit(self)
-        amountLabel = QLabel("Amount:")
-        amountLine = QLineEdit(self)
-        list_1 = [nameLabel, nameLine, ageLabel, ageLine,
-                  scoreLabel, scoreLine, amountLabel, amountLine]
-
         hbox_1 = QHBoxLayout()
-        for s in list_1:
-            hbox_1.addWidget(s)
+
+        labelList = ["Name:", "Age:", "Score:", "Amount:"]
+        for list in labelList:
+            label = QLabel(list)
+            hbox_1.addWidget(label)
+            hbox_1.addWidget(QLineEdit(self))
 
         #try:
         #    nameLine.valuechanged.connect()
 
-        ###
-        buttonlist = ["Add", "Del", "Find", "Inc", "Show"]
-        addButton, delButton, findButton, incButton, showButton = QPushButton(s for s in list)
-        """
-        addButton = QPushButton("Add")
-        delButton = QPushButton("Del")
-        findButton = QPushButton("Find")
-        incButton = QPushButton("Inc")
-        showButton = QPushButton("Show")
-"""
+        ########################
+        hbox_2 = QHBoxLayout()
+
+        buttonList = ["Add", "Del", "Find", "Inc", "Show"]
+        for list in buttonList:
+            button = QPushButton(list)
+            hbox_2.addWidget(button)
+            if list == "Inc":
+                hbox_2.addStretch(1)
+            button.clicked.connect(self.buttonClicked)
+
         keyLabel = QLabel("key")
         keycombo = QComboBox(self)
-        keycombo.addItem("Name")
-        keycombo.addItem("Score")
-        list_2 = [addButton, delButton, findButton, incButton,
-                  showButton, keyLabel, keycombo]
-
-        hbox_2 = QHBoxLayout()
-        for s in list_2:
-            hbox_2.addWidget(s)
-            if s == incButton:
-                hbox_2.addStretch(1)
-        for i in range(0,5):
-            list_2[i].clicked.connect(self.buttonClicked)
+        keycombo.addItems(["Name","Score"])
+        hbox_2.addWidget(keyLabel)
+        hbox_2.addWidget(keycombo)
 
 
-
-        ###
+        #######################3
         resultLabel = QLabel("Result:")
         resultText = QTextEdit(self)
         hbox_3 = QHBoxLayout()
         hbox_3.addWidget(resultLabel)
         hbox_3.addWidget(resultText)
 
+        ########################
         vbox = QVBoxLayout()
         vbox.addLayout(hbox_1)
         vbox.addLayout(hbox_2)
