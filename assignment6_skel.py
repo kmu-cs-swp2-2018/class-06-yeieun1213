@@ -22,8 +22,10 @@ class ScoreDB(QWidget):
         labelList = ["Name:", "Age:", "Score:", "Amount:"]
         for list in labelList:
             label = QLabel(list)
+            line = QLineEdit()
             hbox_1.addWidget(label)
-            hbox_1.addWidget(QLineEdit(self))
+            hbox_1.addWidget(line)
+
 
         #try:
         #    nameLine.valuechanged.connect()
@@ -48,9 +50,13 @@ class ScoreDB(QWidget):
 
         #######################3
         resultLabel = QLabel("Result:")
+        ran_vbox = QVBoxLayout()
+        ran_vbox.addWidget(resultLabel)
+        ran_vbox.addStretch(1)
         resultText = QTextEdit(self)
+
         hbox_3 = QHBoxLayout()
-        hbox_3.addWidget(resultLabel)
+        hbox_3.addLayout(ran_vbox)
         hbox_3.addWidget(resultText)
 
         ########################
@@ -68,12 +74,18 @@ class ScoreDB(QWidget):
     def buttonClicked(self):
         sender = self.sender()
         if sender.text() == "Add":
-            addScoreDB()
+            print("Add")
+        elif sender.text() == "Del":
+            print("Del")
+        elif sender.text() == "Find":
+            print("Find")
+        elif sender.text() == "Inc":
+            print("Inc")
+        else:
+            print("Show")
 
-    def addScoreDB(self):
 
-
-     def closeEvent(self, event):
+    def closeEvent(self, event):
         self.writeScoreDB()
 
     def readScoreDB(self):
