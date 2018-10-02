@@ -38,7 +38,6 @@ class ScoreDB(QWidget):
 
         ###
         buttonlist = ["Add", "Del", "Find", "Inc", "Show"]
-        addButton, delButton, findButton, incButton, showButton = QPushButton(s for s in list)
         """
         addButton = QPushButton("Add")
         delButton = QPushButton("Del")
