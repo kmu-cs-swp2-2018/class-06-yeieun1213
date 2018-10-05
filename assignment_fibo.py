@@ -11,10 +11,8 @@ def iterfibo(n):
     z = 1
     num = 0
 
-    if n == 0:
-        return 0
-    elif n == 1:
-        return 1
+    if n == 0 or n == 1:
+        return n
     else:
         for i in range(n - 1):
             num = y + z
