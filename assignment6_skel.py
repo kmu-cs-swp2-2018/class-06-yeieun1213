@@ -115,10 +115,8 @@ class ScoreDB(QWidget):
     def showResult(self, scoredb, keyname):
         self.resultText.clear()
         for p in sorted(scoredb, key=lambda person: person[keyname]):
-            result = ""
             for attr in sorted(p):
-                result += "%s = %s     " %(attr, str(p[attr]))
-            self.resultText.insertPlainText(result)
+                self.resultText.insertPlainText("%s = %s     " %(attr, str(p[attr])))
             self.resultText.insertPlainText("\n")
 
 
