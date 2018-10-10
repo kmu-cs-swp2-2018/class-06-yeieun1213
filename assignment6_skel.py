@@ -84,35 +84,42 @@ class ScoreDB(QWidget):
 
 
     def addButtonClicked(self):
-        record = {'Name':self.nameLine.text(), 'Age':self.ageLine.text(), 'Score':self.scoreLine.text()}
+        record = {'Name':self.nameLine.text(), 'Age':self.ageLine.text(), 'Score':int(self.scoreLine.text())}
         self.scoredb += [record]
+        self.showResult(self.scoredb, "Name")
 
     def delButtonClicked(self):
         for p in self.scoredb[:]:
             if p['Name'] == self.nameLine.text():
                 self.scoredb.remove(p)
+        self.showResult(self.scoredb, "Name")
 
     def findButtonClicked(self):
+        self.resultText.clear()
         for p in self.scoredb:
             if p['Name'] == self.nameLine.text():
                 for attr in p:
-                    self.resultText.setText("%s = %s" % (attr, str(p[attr])), end=' ')
-                self.resultText.setText()
+                    self.resultText.insertPlainText("%s = %s     " % (attr, str(p[attr])))
+                self.resultText.insertPlainText("\n")
 
     def incButtonClicked(self):
         for p in self.scoredb:
             if p['Name'] == self.nameLine.text():
-                p['Score'] += self.amountLine.text()
+                p['Score'] += int(self.amountLine.text())
+        self.showResult(self.scoredb, "Name")
 
     def showButtonClicked(self):
         sortKey = self.keycombo.currentText()
         self.showResult(self.scoredb, sortKey)
 
     def showResult(self, scoredb, keyname):
+        self.resultText.clear()
         for p in sorted(scoredb, key=lambda person: person[keyname]):
+            result = ""
             for attr in sorted(p):
-                self.resultText.setText("%s = %s" %(attr, str(p[attr])))
-            self.resultText.setText("")
+                result += "%s = %s     " %(attr, str(p[attr]))
+            self.resultText.insertPlainText(result)
+            self.resultText.insertPlainText("\n")
 
 
 
