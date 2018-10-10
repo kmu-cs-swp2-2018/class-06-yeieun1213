@@ -16,36 +16,47 @@ class ScoreDB(QWidget):
         self.readScoreDB()
         self.showScoreDB()
 
+
     def initUI(self):
         hbox_1 = QHBoxLayout()
-
+        """
         labelList = ["Name:", "Age:", "Score:", "Amount:"]
         for list in labelList:
             label = QLabel(list)
             line = QLineEdit()
             hbox_1.addWidget(label)
             hbox_1.addWidget(line)
+            line.textChanged.connect(self.buttonClicked)
+        """
+        labelList = ["Name:", "Age", "Score:", "Amount:"]
+        self.nameLine = QLineEdit()
+        self.ageLine = QLineEdit()
+        self.scoreLine = QLineEdit()
+        self.amountLine = QLineEdit()
+        lineList = [self.nameLine, self.ageLine, self.scoreLine, self.amountLine]
 
-
-        #try:
-        #    nameLine.valuechanged.connect()
+        for label, line in zip(labelList, lineList):
+            label = QLabel(label)
+            hbox_1.addWidget(label)
+            hbox_1.addWidget(line)
 
         ########################
         hbox_2 = QHBoxLayout()
 
         buttonList = ["Add", "Del", "Find", "Inc", "Show"]
-        for list in buttonList:
-            button = QPushButton(list)
+        connectList = [self.addButtonClicked, self.delButtonClicked, self.findButtonClicked, self.incButtonClicked, self.showButtonClicked]
+        for b, c in zip(buttonList, connectList):
+            button = QPushButton(b)
             hbox_2.addWidget(button)
-            if list == "Inc":
+            if b == "Inc":
                 hbox_2.addStretch(1)
-            button.clicked.connect(self.buttonClicked)
+            button.clicked.connect(c)
 
         keyLabel = QLabel("key")
-        keycombo = QComboBox(self)
-        keycombo.addItems(["Name","Score"])
+        self.keycombo = QComboBox()
+        self.keycombo.addItems(["Name","Score"])
         hbox_2.addWidget(keyLabel)
-        hbox_2.addWidget(keycombo)
+        hbox_2.addWidget(self.keycombo)
 
 
         #######################3
@@ -53,11 +64,12 @@ class ScoreDB(QWidget):
         ran_vbox = QVBoxLayout()
         ran_vbox.addWidget(resultLabel)
         ran_vbox.addStretch(1)
-        resultText = QTextEdit(self)
+        self.resultText = QTextEdit()
+
 
         hbox_3 = QHBoxLayout()
         hbox_3.addLayout(ran_vbox)
-        hbox_3.addWidget(resultText)
+        hbox_3.addWidget(self.resultText)
 
         ########################
         vbox = QVBoxLayout()
@@ -71,18 +83,37 @@ class ScoreDB(QWidget):
         self.show()
 
 
-    def buttonClicked(self):
-        sender = self.sender()
-        if sender.text() == "Add":
-            print("Add")
-        elif sender.text() == "Del":
-            print("Del")
-        elif sender.text() == "Find":
-            print("Find")
-        elif sender.text() == "Inc":
-            print("Inc")
-        else:
-            print("Show")
+    def addButtonClicked(self):
+        record = {'Name':self.nameLine.text(), 'Age':self.ageLine.text(), 'Score':self.scoreLine.text()}
+        self.scoredb += [record]
+
+    def delButtonClicked(self):
+        for p in self.scoredb[:]:
+            if p['Name'] == self.nameLine.text():
+                self.scoredb.remove(p)
+
+    def findButtonClicked(self):
+        for p in self.scoredb:
+            if p['Name'] == self.nameLine.text():
+                for attr in p:
+                    self.resultText.setText("%s = %s" % (attr, str(p[attr])), end=' ')
+                self.resultText.setText()
+
+    def incButtonClicked(self):
+        for p in self.scoredb:
+            if p['Name'] == self.nameLine.text():
+                p['Score'] += self.amountLine.text()
+
+    def showButtonClicked(self):
+        sortKey = self.keycombo.currentText()
+        self.showResult(self.scoredb, sortKey)
+
+    def showResult(self, scoredb, keyname):
+        for p in sorted(scoredb, key=lambda person: person[keyname]):
+            for attr in sorted(p):
+                self.resultText.setText("%s = %s" %(attr, str(p[attr])))
+            self.resultText.setText("")
+
 
 
     def closeEvent(self, event):
