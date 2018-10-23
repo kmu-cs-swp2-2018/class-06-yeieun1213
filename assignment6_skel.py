@@ -14,20 +14,11 @@ class ScoreDB(QWidget):
         self.dbfilename = 'assignment6.dat'
         self.scoredb = []
         self.readScoreDB()
-        self.showScoreDB()
 
 
     def initUI(self):
         hbox_1 = QHBoxLayout()
-        """
-        labelList = ["Name:", "Age:", "Score:", "Amount:"]
-        for list in labelList:
-            label = QLabel(list)
-            line = QLineEdit()
-            hbox_1.addWidget(label)
-            hbox_1.addWidget(line)
-            line.textChanged.connect(self.buttonClicked)
-        """
+
         labelList = ["Name:", "Age", "Score:", "Amount:"]
         self.nameLine = QLineEdit()
         self.ageLine = QLineEdit()
@@ -58,14 +49,12 @@ class ScoreDB(QWidget):
         hbox_2.addWidget(keyLabel)
         hbox_2.addWidget(self.keycombo)
 
-
-        #######################3
+        #######################
         resultLabel = QLabel("Result:")
         ran_vbox = QVBoxLayout()
         ran_vbox.addWidget(resultLabel)
         ran_vbox.addStretch(1)
         self.resultText = QTextEdit()
-
 
         hbox_3 = QHBoxLayout()
         hbox_3.addLayout(ran_vbox)
@@ -84,42 +73,61 @@ class ScoreDB(QWidget):
 
 
     def addButtonClicked(self):
-        record = {'Name':self.nameLine.text(), 'Age':self.ageLine.text(), 'Score':int(self.scoreLine.text())}
-        self.scoredb += [record]
-        self.showResult(self.scoredb, "Name")
+        try :
+            record = {'Name':self.nameLine.text(), 'Age':self.ageLine.text(), 'Score':int(self.scoreLine.text())}
+        except ValueError:
+            result = 'ValueError : name must be str, age and score must be int'
+            self.showResult(result)
+        except IndexError:
+            result = 'IndexError : input \"add name age score\"'
+            self.showResult(result)
+        else :
+            self.scoredb += [record]
+            self.showScoreDB(self.scoredb)
 
     def delButtonClicked(self):
-        for p in self.scoredb[:]:
-            if p['Name'] == self.nameLine.text():
-                self.scoredb.remove(p)
-        self.showResult(self.scoredb, "Name")
+        try:
+            for p in self.scoredb[:]:
+                if p['Name'] == self.nameLine.text():
+                    self.scoredb.remove(p)
+        except ValueError:
+            result = 'ValueError : name must be str'
+            self.showResult(result)
+        except IndexError:
+            result = 'IndexError : input \"del name\"'
+            self.showResult(result)
+        else:
+            self.showScoreDB(self.scoredb)
 
     def findButtonClicked(self):
-        self.resultText.clear()
-        for p in self.scoredb:
-            if p['Name'] == self.nameLine.text():
-                for attr in p:
-                    self.resultText.insertPlainText("%s = %s     " % (attr, str(p[attr])))
-                self.resultText.insertPlainText("\n")
+        try:
+            self.showScoreDB(self.scoredb)
+        except IndexError:
+            result = 'IndexError : input \"find name\"'
+            self.showResult(result)
 
     def incButtonClicked(self):
-        for p in self.scoredb:
-            if p['Name'] == self.nameLine.text():
-                p['Score'] += int(self.amountLine.text())
-        self.showResult(self.scoredb, "Name")
+        try:
+            for p in self.scoredb:
+                if p['Name'] == self.nameLine.text():
+                    p['Score'] += int(self.amountLine.text())
+        except ValueError:
+            result = 'ValueError : name must be str, amount must be int'
+            self.showResult(result)
+        except IndexError:
+            result = 'IndexError : input \"inc name amount\"'
+            self.showResult(result)
+        else:
+            self.showScoreDB(self.scoredb)
 
     def showButtonClicked(self):
-        sortKey = self.keycombo.currentText()
-        self.showResult(self.scoredb, sortKey)
-
-    def showResult(self, scoredb, keyname):
-        self.resultText.clear()
-        for p in sorted(scoredb, key=lambda person: person[keyname]):
-            for attr in sorted(p):
-                self.resultText.insertPlainText("%s = %s     " %(attr, str(p[attr])))
-            self.resultText.insertPlainText("\n")
-
-
+        try:
+            sortKey = self.keycombo.currentText()
+        except KeyError:
+            result = '\'KeyError :\'' + sortKey
+            self.showResult(result)
+        else:
+            self.showScoreDB(self.scoredb, sortKey)
 
     def closeEvent(self, event):
         self.writeScoreDB()
@@ -139,15 +147,29 @@ class ScoreDB(QWidget):
             pass
         fH.close()
 
-
     # write the data into person db
     def writeScoreDB(self):
         fH = open(self.dbfilename, 'wb')
         pickle.dump(self.scoredb, fH)
         fH.close()
 
-    def showScoreDB(self):
-        pass
+    def showScoreDB(self, scoredb, keyname=None):
+        self.resultText.clear()
+        if keyname == None:
+            for p in scoredb:
+                if p['Name'] == self.nameLine.text():
+                    for attr in sorted(p):
+                        self.resultText.insertPlainText("%s = %s     " %(attr, str(p[attr])))
+                    self.resultText.insertPlainText("\n")
+        else:
+            for p in sorted(scoredb, key = lambda person: person[keyname]):
+                for attr in sorted(p):
+                    self.resultText.insertPlainText("%s = %s     " %(attr, str(p[attr])))
+                self.resultText.insertPlainText("\n")
+
+    def showResult(self, result):
+        self.resultText.clear()
+        self.resultText.insertPlainText(result)
 
 
 if __name__ == '__main__':    
