@@ -54,13 +54,11 @@ def doScoreDB(scdb):
             if len(parse) >= 3:
                 print('IndexError : input \"del name\"')
             try:
-                while(True):
-                    for p in scdb[:]:
-                        if p['Name'] == parse[1]:
-                            scdb.remove(p)
+                for p in scdb[:]:
+                    if p['Name'] == parse[1]:
+                        scdb.remove(p)
                     if parse[1] not in p['Name']:
                         print('Does not exist')
-                    break
             except IndexError:
                 print('IndexError : input \"del name\"')
 
@@ -74,19 +72,19 @@ def doScoreDB(scdb):
                 print('KeyError :', sortKey)
 
         elif parse[0] == 'find':
-            if len(parse) >= 2:
+            if len(parse) > 2:
                 print('IndexError : input \"find name\"')
             try:
-                while(True):
-                    for p in scdb:
-                        if p['Name'] == parse[1]:
-                            for attr in p:
-                                    #must be str, not int
-                                    print("%s = %s" %(attr, str(p[attr])), end=' ')
-                            print()
-                    if parse[1] not in p['Name']:
-                        print("Does not exist")
-                    break
+                num = 0
+                for p in scdb:
+                    if p['Name'] == parse[1]:
+                        num += 1
+                        for attr in p:
+                            #must be str, not int
+                            print("%s = %s" %(attr, str(p[attr])), end=' ')
+                        print()
+                if num == 0:
+                    print("Does not exist")
             except IndexError:
                 print('IndexError : input \"find name\"')
 

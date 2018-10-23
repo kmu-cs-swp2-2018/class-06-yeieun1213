@@ -163,8 +163,13 @@ class ScoreDB(QWidget):
                     for attr in sorted(p):
                         self.resultText.insertPlainText("%s = %s     " %(attr, str(p[attr])))
                     self.resultText.insertPlainText("\n")
+            if self.nameLine.text() == '':
+                num = -1
             if num == 0:
                 result = 'we can\'t find \'%s\'' %(self.nameLine.text())
+                self.resultText.insertPlainText(result)
+            elif num == -1:
+                result = 'input name'
                 self.resultText.insertPlainText(result)
         else:
             for p in sorted(scoredb, key = lambda person: person[keyname]):
