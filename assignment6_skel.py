@@ -155,12 +155,17 @@ class ScoreDB(QWidget):
 
     def showScoreDB(self, scoredb, keyname=None):
         self.resultText.clear()
+        num = 0
         if keyname == None:
             for p in scoredb:
                 if p['Name'] == self.nameLine.text():
+                    num = 1
                     for attr in sorted(p):
                         self.resultText.insertPlainText("%s = %s     " %(attr, str(p[attr])))
                     self.resultText.insertPlainText("\n")
+            if num == 0:
+                result = 'we can\'t find \'%s\'' %(self.nameLine.text())
+                self.resultText.insertPlainText(result)
         else:
             for p in sorted(scoredb, key = lambda person: person[keyname]):
                 for attr in sorted(p):
