@@ -4,6 +4,9 @@ def factorial(numStr):
     try:
         n = int(numStr)
         r = str(fact(n))
+        if n != numStr:
+            r = 'Error!'
+            return r
     except:
         r = 'Error!'
     return r
