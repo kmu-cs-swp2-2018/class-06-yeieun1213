@@ -53,6 +53,8 @@ def romanToDec(numStr):
         s = str(numStr)
     except:
         return 'Error!_!'
+    if s.isalpha() == False:
+        return 'Error!_!'
 
     romans = [
         (1000, 'M'), (900, 'CM'), (500, 'D'), (400, 'CD'),
@@ -65,9 +67,10 @@ def romanToDec(numStr):
     for value, letters in romans:
         if s == '':
             break
+
         while(True):
             n = s.find(letters)
-            if n == -1:
+            if (n == -1) or (n >= 1):
                 break
 
             result += value
