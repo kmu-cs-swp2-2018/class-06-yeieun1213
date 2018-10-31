@@ -17,37 +17,37 @@ class ScoreDB(QWidget):
 
 
     def initUI(self):
-        hbox_1 = QHBoxLayout()
+        hbox_item = QHBoxLayout()
 
-        labelList = ["Name:", "Age", "Score:", "Amount:"]
+        itemList = ["Name:", "Age", "Score:", "Amount:"]
         self.nameLine = QLineEdit()
         self.ageLine = QLineEdit()
         self.scoreLine = QLineEdit()
         self.amountLine = QLineEdit()
         lineList = [self.nameLine, self.ageLine, self.scoreLine, self.amountLine]
 
-        for label, line in zip(labelList, lineList):
+        for label, line in zip(itemList, lineList):
             label = QLabel(label)
-            hbox_1.addWidget(label)
-            hbox_1.addWidget(line)
+            hbox_item.addWidget(label)
+            hbox_item.addWidget(line)
 
         ########################
-        hbox_2 = QHBoxLayout()
+        hbox_function = QHBoxLayout()
 
         buttonList = ["Add", "Del", "Find", "Inc", "Show"]
         connectList = [self.addButtonClicked, self.delButtonClicked, self.findButtonClicked, self.incButtonClicked, self.showButtonClicked]
         for b, c in zip(buttonList, connectList):
             button = QPushButton(b)
-            hbox_2.addWidget(button)
+            hbox_function.addWidget(button)
             if b == "Inc":
-                hbox_2.addStretch(1)
+                hbox_function.addStretch(1)
             button.clicked.connect(c)
 
         keyLabel = QLabel("key")
         self.keycombo = QComboBox()
         self.keycombo.addItems(["Name","Score"])
-        hbox_2.addWidget(keyLabel)
-        hbox_2.addWidget(self.keycombo)
+        hbox_function.addWidget(keyLabel)
+        hbox_function.addWidget(self.keycombo)
 
         #######################
         resultLabel = QLabel("Result:")
@@ -55,17 +55,17 @@ class ScoreDB(QWidget):
         ran_vbox.addWidget(resultLabel)
         ran_vbox.addStretch(1)
         self.resultText = QTextEdit()
-        hbox_3 = QHBoxLayout()
-        hbox_3.addLayout(ran_vbox)
-        hbox_3.addWidget(self.resultText)
+        hbox_result = QHBoxLayout()
+        hbox_result.addLayout(ran_vbox)
+        hbox_result.addWidget(self.resultText)
 
         ########################
         self.errorText = QLabel()
 
         vbox = QVBoxLayout()
-        vbox.addLayout(hbox_1)
-        vbox.addLayout(hbox_2)
-        vbox.addLayout(hbox_3)
+        vbox.addLayout(hbox_item)
+        vbox.addLayout(hbox_function)
+        vbox.addLayout(hbox_result)
         vbox.addWidget(self.errorText)
 
         self.setLayout(vbox)
