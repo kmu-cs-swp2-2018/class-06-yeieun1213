@@ -55,16 +55,18 @@ class ScoreDB(QWidget):
         ran_vbox.addWidget(resultLabel)
         ran_vbox.addStretch(1)
         self.resultText = QTextEdit()
-
         hbox_3 = QHBoxLayout()
         hbox_3.addLayout(ran_vbox)
         hbox_3.addWidget(self.resultText)
 
         ########################
+        self.errorText = QLabel()
+
         vbox = QVBoxLayout()
         vbox.addLayout(hbox_1)
         vbox.addLayout(hbox_2)
         vbox.addLayout(hbox_3)
+        vbox.addWidget(self.errorText)
 
         self.setLayout(vbox)
         self.setGeometry(300, 300, 300, 150)
@@ -73,59 +75,64 @@ class ScoreDB(QWidget):
 
 
     def addButtonClicked(self):
+        self.errorText.setText('')
         try :
             record = {'Name':self.nameLine.text(), 'Age':self.ageLine.text(), 'Score':int(self.scoreLine.text())}
         except ValueError:
             result = 'ValueError : name must be str, age and score must be int'
-            self.showResult(result)
+            self.errorText.setText(result)
         except IndexError:
             result = 'IndexError : input \"add name age score\"'
-            self.showResult(result)
+            self.errorText.setText(result)
         else :
             self.scoredb += [record]
             self.showScoreDB(self.scoredb)
 
     def delButtonClicked(self):
+        self.errorText.setText('')
         try:
             for p in self.scoredb[:]:
                 if p['Name'] == self.nameLine.text():
                     self.scoredb.remove(p)
         except ValueError:
             result = 'ValueError : name must be str'
-            self.showResult(result)
+            self.errorText.setText(result)
         except IndexError:
             result = 'IndexError : input \"del name\"'
-            self.showResult(result)
+            self.errorText.setText(result)
         else:
             self.showScoreDB(self.scoredb)
 
     def findButtonClicked(self):
+        self.errorText.setText('')
         try:
             self.showScoreDB(self.scoredb)
         except IndexError:
             result = 'IndexError : input \"find name\"'
-            self.showResult(result)
+            self.errorText.setText(result)
 
     def incButtonClicked(self):
+        self.errorText.setText('')
         try:
             for p in self.scoredb:
                 if p['Name'] == self.nameLine.text():
                     p['Score'] += int(self.amountLine.text())
         except ValueError:
             result = 'ValueError : name must be str, amount must be int'
-            self.showResult(result)
+            self.errorText.setText(result)
         except IndexError:
             result = 'IndexError : input \"inc name amount\"'
-            self.showResult(result)
+            self.errorText.setText(result)
         else:
             self.showScoreDB(self.scoredb)
 
     def showButtonClicked(self):
+        self.errorText.setText('')
         try:
             sortKey = self.keycombo.currentText()
         except KeyError:
             result = '\'KeyError :\'' + sortKey
-            self.showResult(result)
+            self.errorText.setText(result)
         else:
             self.showScoreDB(self.scoredb, sortKey)
 
@@ -154,6 +161,7 @@ class ScoreDB(QWidget):
         fH.close()
 
     def showScoreDB(self, scoredb, keyname=None):
+        self.errorText.setText('')
         self.resultText.clear()
         if keyname == None:
             for p in scoredb:
@@ -163,10 +171,11 @@ class ScoreDB(QWidget):
                     self.resultText.insertPlainText("\n")
             if self.nameLine.text() == '':
                 result = 'input name'
-                self.resultText.insertPlainText(result)
-            elif self.resultText.toPlainText() == '':
+                self.errorText.setText(result)
+            if self.resultText.toPlainText() == '':
                 result = 'we can\'t find \'%s\'' %(self.nameLine.text())
-                self.resultText.insertPlainText(result)
+                self.errorText.setText(result)
+
 
         else:
             for p in sorted(scoredb, key = lambda person: person[keyname]):
