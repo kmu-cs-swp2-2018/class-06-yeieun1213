@@ -29,8 +29,8 @@ def decToRoman(numStr):
         n = int(numStr)
     except:
         return 'Error!'
-    
-    if n>= 4000:
+
+    if n >= 4000:
         return 'Error!'
     
     romans = [
@@ -70,19 +70,15 @@ def romanToDec(numStr):
 
         while(True):
             n = s.find(letters)
-            if (n == -1) or (n >= 1):
+            num = len(letters)
+            if (n != 0):
                 break
 
             result += value
 
-            if len(letters) == 1:
-                s = s[n+1::]
-            elif len(letters) == 2:
-                s = s[n+2::]
-            else:
-                return 'Error!'
+            s = s[n+num:]
 
-    return str(result)
+    return result
 
 if __name__ == '__main__':
     #1900
