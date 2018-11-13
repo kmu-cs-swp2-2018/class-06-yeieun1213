@@ -13,7 +13,7 @@ def factorial(numStr):
 
 def decToBin(numStr):
     try:
-        n = int(numStr)
+        n = int(numStr) #int로 바꿨는데 왜 3.5 넣으면 계산기에서 오류?
         r = bin(n)[2:]
     except:
         r = 'Error!'
@@ -39,4 +39,7 @@ if __name__ == '__main__':
     print(factorial(5),
     factorial(0),
     factorial(-1),
-    factorial(3.5))
+    factorial(3.5),
+    decToBin(5),
+    decToBin(3.5)
+          )

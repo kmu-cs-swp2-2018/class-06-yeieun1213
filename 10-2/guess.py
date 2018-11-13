@@ -1,3 +1,5 @@
+from hangman import Hangman
+
 class Guess:
 
     def __init__(self, word):
@@ -14,19 +16,26 @@ class Guess:
 
 
     def display(self):
+        print(self.secretWord)
         print("Current: %s" %(self.currentStatus))
-        print("Tries: %d" %(self.numTries))
+        print("Tries: %d \t Life: %d" %(self.numTries, Hangman().getLife()))
 
 
     def guess(self, character):
         # 추측에 사용된 글자를 guessedChars 집합에 추가
         self.guessedChars.add(character)
+        # 정답에 같은 글자가 있는 개수가 1보다 클 때를 위해
+        answer = self.secretWord
 
         # 정답에 character가 있다면,
         if character in self.secretWord:
-            num = self.secretWord.find(character)   # character의 index값을 num 변수에 대입
-            # character를 올바른 위치에 삽입
-            self.currentStatus = self.currentStatus[:num] + character + self.currentStatus[num+1:]
+            # 정답에 같은 글자가 있는 갯수만큼 for문
+            for i in range(self.secretWord.count(character)):
+                num = answer.find(character)   # character의 index값을 num 변수에 대입
+                # character를 올바른 위치에 삽입
+                self.currentStatus = self.currentStatus[:num] + character + self.currentStatus[num+1:]
+                # answer에 character와 똑같은 부분 '_'로 바꾸기
+                answer = answer[:num] + '_' + answer[num+1:]
         else:   # 실패했을 때 추측 실패 횟수 +1
             self.numTries += 1
 

@@ -16,7 +16,7 @@ class Word:
     def test(self):
         return 'default'
 
-    def ramFromDB(self):
+    def randFromDB(self):
     # len(self.words) : 단어 사전의 길이
     # 그 길이 숫자까지의 범위안에서 랜덤으로 임의의 수 하나를 선택
     # 사전에서 그 임의의 수에 해당하는 인덱스 값을 지닌 단어 return

@@ -163,25 +163,25 @@ class ScoreDB(QWidget):
     def showScoreDB(self, scoredb, keyname=None):
         self.errorText.setText('')
         self.resultText.clear()
-        if keyname == None:
-            for p in scoredb:
-                if p['Name'] == self.nameLine.text():
-                    for attr in sorted(p):
-                        self.resultText.insertPlainText("%s = %s     " %(attr, str(p[attr])))
-                    self.resultText.insertPlainText("\n")
-            if self.nameLine.text() == '':
-                result = 'input name'
-                self.errorText.setText(result)
-            if self.resultText.toPlainText() == '':
-                result = 'we can\'t find \'%s\'' %(self.nameLine.text())
-                self.errorText.setText(result)
 
 
-        else:
-            for p in sorted(scoredb, key = lambda person: person[keyname]):
-                for attr in sorted(p):
-                    self.resultText.insertPlainText("%s = %s     " %(attr, str(p[attr])))
-                self.resultText.insertPlainText("\n")
+#        if keyname == None:
+#            for p in scoredb:
+#                if p['Name'] == self.nameLine.text():
+#                    for attr in sorted(p):
+#                        self.resultText.insertPlainText("%s = %s     " %(attr, str(p[attr])))
+#                    self.resultText.insertPlainText("\n")
+#            if self.resultText.toPlainText() == '':
+#                result = 'we can\'t find \'%s\'' % (self.nameLine.text())
+#                self.errorText.setText(result)
+#            if self.nameLine.text() == '':
+#                result = 'input name'
+#                self.errorText.setText(result)
+#        else:
+##            for p in sorted(scoredb, key = lambda person: person[keyname]):
+#                for attr in sorted(p):
+#                    self.resultText.insertPlainText("%s = %s     " %(attr, str(p[attr])))
+#                self.resultText.insertPlainText("\n")
 
     def showResult(self, result):
         self.resultText.clear()

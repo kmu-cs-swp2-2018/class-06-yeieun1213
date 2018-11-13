@@ -1,5 +1,12 @@
 from math import factorial as fact
 
+romans = [
+        (1000, 'M'), (900, 'CM'), (500, 'D'), (400, 'CD'),
+        (100, 'C'), (90, 'XC'), (50, 'L'), (40, 'XL'),
+        (10, 'X'), (9, 'IX'), (5, 'V'), (4, 'IV'),
+        (1, 'I')
+    ]
+
 def factorial(numStr):
     try:
         n = int(numStr)
@@ -32,13 +39,6 @@ def decToRoman(numStr):
 
     if n >= 4000:
         return 'Error!'
-    
-    romans = [
-        (1000, 'M'), (900, 'CM'), (500, 'D'), (400, 'CD'),
-         (100, 'C'),  (90, 'XC'),  (50, 'L'),  (40, 'XL'),
-          (10, 'X'),   (9, 'IX'),   (5, 'V'),   (4, 'IV'),
-           (1, 'I')
-    ]
 
     result = ''
     for value, letters in romans:
@@ -49,19 +49,15 @@ def decToRoman(numStr):
     return result
 
 def romanToDec(numStr):
+    alpha = ('M', 'D', 'C', 'L', 'X', 'V', 'I')
     try:
-        s = str(numStr)
+        for i in len(numStr):
+            if numStr[i] not in alpha:
+                result =
+            else:
+                s = str(numStr)
     except:
         return 'Error!_!'
-    if s.isalpha() == False:
-        return 'Error!_!'
-
-    romans = [
-        (1000, 'M'), (900, 'CM'), (500, 'D'), (400, 'CD'),
-        (100, 'C'), (90, 'XC'), (50, 'L'), (40, 'XL'),
-        (10, 'X'), (9, 'IX'), (5, 'V'), (4, 'IV'),
-        (1, 'I')
-    ]
 
     result = 0
     for value, letters in romans:
@@ -70,13 +66,12 @@ def romanToDec(numStr):
 
         while(True):
             n = s.find(letters)
-            num = len(letters)
             if (n != 0):
                 break
 
             result += value
 
-            s = s[n+num:]
+            s = s[n + len(letters):]
 
     return result
 
@@ -89,4 +84,6 @@ if __name__ == '__main__':
     print(romanToDec('CCC'))
     #23
     print(romanToDec('XXIII'))
+    print(romanToDec('555'))
+    print(romanToDec('xxx'))
 
