@@ -132,11 +132,13 @@ class HangmanGame(QWidget):
 
         if self.guess.finished():
             # 메시지 ("Success!") 출력하고, self.gameOver 는 True 로
-            pass
+            self.message.setText("Success!")
+            self.gameOver = True
 
         elif self.hangman.getRemainingLives() == 0:
             # 메시지 ("Fail!" + 비밀 단어) 출력하고, self.gameOver 는 True 로
-            pass
+            self.message.setText("Fail!   Secret Word: " + self.guess.secretWord)
+            self.gameOver = True
 
 
 if __name__ == '__main__':
