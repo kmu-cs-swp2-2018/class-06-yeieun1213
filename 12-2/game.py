@@ -89,7 +89,7 @@ class HangmanGame(QWidget):
 
     def startGame(self):
         self.hangman = Hangman()
-        self.guess = Guess(self.word.randFromDB())
+        self.guess = Guess(self.word.randFromDB(self.word.getMinLength()//2))
         self.gameOver = False
 
         self.hangmanWindow.setPlaceholderText(self.hangman.currentShape())
