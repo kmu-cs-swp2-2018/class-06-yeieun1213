@@ -1,5 +1,5 @@
 from hangmanGUI import Hangman
-from guess import Guess
+from guessGUI import Guess
 from word import Word
 
 from PyQt5.QtWidgets import QApplication, QWidget
@@ -86,7 +86,7 @@ class HangmanGame(QWidget):
         self.message.clear()
 
         self.hangman = Hangman()
-        self.guess = Guess(self.word.randFromDB())
+        self.guess = Guess(self.word.randFromDB(8))
         # self가 없으면 다른 함수에서 사용을 못하는 것 같음
         # startGame함수에서만 사용 가능
         self.gameOver = False
@@ -104,26 +104,30 @@ class HangmanGame(QWidget):
         if self.gameOver == True:
             self.message.setText('GAME OVER!')
 
-        if len(guessedChar) != 1:
-            self.message.setText("One character at a time!")
-
-        if guessedChar in self.guess.guessedChars:
-            self.message.setText("You already guessed \' %c \' " %(guessedChar))
-
-        if self.guess.guess(guessedChar):
-            self.message.setText("Success!")
-            self.gameOver = True
         else:
-            self.hangman.decreaseLife()
-            self.message.setText("Remaining Life: " + str(self.hangman.getRemainingLives()))
+            if len(guessedChar) != 1 or len(guessedChar) == 0:
+                self.message.setText("One character at a time!")
+
+            if guessedChar in self.guess.guessedChars:
+                self.message.setText("You already guessed \' %c \' " %(guessedChar))
+
+            if self.guess.finished():
+                self.message.setText("Success!")
+                self.gameOver = True
+            # 틀렸을 때 목숨 줄이기
+            if not self.guess.guess(guessedChar):
+                self.hangman.decreaseLife()
+                self.message.setText("Remaining Life: " + str(self.hangman.getRemainingLives()))
+                # 만약 목숨이 0일 때 Fail
+            if self.hangman.getRemainingLives() == 0:
+                self.message.setText("Fail! Secret Word: " + self.guess.secretWord)
+                self.gameOver = True
 
         self.hangmanWindow.setText(self.hangman.currentShape())
         self.currentWord.setText(self.guess.displayCurrent())
         self.guessedChars.setText(self.guess.displayGuessed())
 
-        if self.hangman.getRemainingLives == 0:
-            self.message.setText("Fail! Secret Word: " + self.guess.secretWord)
-            self.gameOver = True
+
 
 if __name__ == '__main__':
     import sys
