@@ -18,7 +18,9 @@ class HangmanGame(QWidget):
         hangmanLayout = QGridLayout()
         self.hangmanWindow = QTextEdit()
         self.hangmanWindow.setReadOnly(True)
-        self.hangmanWindow.setAlignment(Qt.AlignLeft) # 왼쪽 정렬
+        # 원래 왼쪽 정렬인데 중앙으로 바꾸고 싶음
+        # 근데 안바꿔지는디?
+        self.hangmanWindow.setAlignment(Qt.AlignCenter)
         font = self.hangmanWindow.font()
         font.setFamily('Courier New') # 고정 폭 글꼴
         self.hangmanWindow.setFont(font)
@@ -89,7 +91,7 @@ class HangmanGame(QWidget):
         self.guess = Guess(self.word.randFromDB(8))
         # self가 없으면 다른 함수에서 사용을 못하는 것 같음
         # startGame함수에서만 사용 가능
-        self.gameOver = False
+#        self.gameOver = False
 
         self.hangmanWindow.setPlaceholderText(self.hangman.currentShape())
         self.currentWord.setText(self.guess.displayCurrent())
@@ -101,31 +103,39 @@ class HangmanGame(QWidget):
         self.charInput.clear()
         self.message.clear()
 
-        if self.gameOver == True:
-            self.message.setText('GAME OVER!')
-
-        else:
-            if len(guessedChar) != 1 or len(guessedChar) == 0:
-                self.message.setText("One character at a time!")
+#        if self.gameOver == True:
+#            self.message.setText('GAME OVER!')
+        try:
 
             if guessedChar in self.guess.guessedChars:
                 self.message.setText("You already guessed \' %c \' " %(guessedChar))
 
-            if self.guess.finished():
+            if self.currentWord == self.guess.secretWord:
                 self.message.setText("Success!")
-                self.gameOver = True
+#                self.gameOver = True
             # 틀렸을 때 목숨 줄이기
             if not self.guess.guess(guessedChar):
                 self.hangman.decreaseLife()
                 self.message.setText("Remaining Life: " + str(self.hangman.getRemainingLives()))
-                # 만약 목숨이 0일 때 Fail
-            if self.hangman.getRemainingLives() == 0:
-                self.message.setText("Fail! Secret Word: " + self.guess.secretWord)
-                self.gameOver = True
 
-        self.hangmanWindow.setText(self.hangman.currentShape())
-        self.currentWord.setText(self.guess.displayCurrent())
-        self.guessedChars.setText(self.guess.displayGuessed())
+            # self.guess.guess(guessedChar)를 호출하면서
+            # guessedChars set에 사용된 character를 넣기 때문에
+            # 방금 사용한 character까지 보고 싶으면 함수가 호출 된 후에 넣어야 함
+            # 나머지도 비슷한 이유
+            self.hangmanWindow.setText(self.hangman.currentShape())
+            self.guessedChars.setText(self.guess.displayGuessed())
+            self.currentWord.setText(self.guess.displayCurrent())
+
+        except TypeError:
+            self.message.setText("One character at a time!")
+
+        # 목숨이 0일 때 게임 끝
+        if self.hangman.getRemainingLives() == 0:
+            self.guessedChars.setText("")
+            self.message.setText("Fail! Secret Word: " + self.guess.secretWord)
+            # 남은 목숨이 0개 일 때 GAME OVER랑 정답까지 한번에 다 나오게
+            self.guessedChars.setText("GAME OVER!")
+#            self.gameOver = True
 
 
 
