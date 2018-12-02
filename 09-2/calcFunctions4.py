@@ -51,9 +51,9 @@ def decToRoman(numStr):
 def romanToDec(numStr):
     alpha = ('M', 'D', 'C', 'L', 'X', 'V', 'I')
     try:
-        for i in len(numStr):
-            if numStr[i] not in alpha:
-                result =
+        for c in numStr:
+            if c not in alpha:
+                return 'Error!_!'
             else:
                 s = str(numStr)
     except:
@@ -86,4 +86,4 @@ if __name__ == '__main__':
     print(romanToDec('XXIII'))
     print(romanToDec('555'))
     print(romanToDec('xxx'))
-
+    print(romanToDec('XiX'))
